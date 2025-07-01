@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text with Cloudy Border Image</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Georgia', serif; /* Use a serif font for a classic feel */
+            background: url('https://example.com/adventure-bg.jpg') no-repeat center center fixed; /* Background image for adventure vibe */
+            background-size: cover;
+            color: #fff; /* White text for contrast */
+        }
+
+        .container {
+            display: flex;
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white for a softer background */
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .text {
+            flex: 1;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.8); /* Lighter background for text area */
+            color: #3B3B3B; /* Dark gray for better readability */
+            line-height: 1.6;
+            border-radius: 15px 0 0 15px; /* Rounded corners on the left */
+        }
+
+        .text h2 {
+            margin-top: 0;
+            color: #B50000; /* Dark red for headings */
+        }
+
+        .image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8); /* Semi-transparent white for image area */
+            padding: 20px;
+            position: relative;
+            border-radius: 0 15px 15px 0; /* Rounded corners on the right */
+        }
+
+        .image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cloudy-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0) 60%, rgba(0, 0, 0, 0.1) 100%);
+            border-radius: 12px;
+            opacity: 0.3;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            width: 0;
+            height: 0;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .arrow.left {
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-right: 20px solid goldenrod;
+            left: calc(50% - 440px); /* Positioned outside of the container on the left */
+        }
+
+        .arrow.right {
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 20px solid gold;
+            right: calc(50% - 440px); /* Positioned outside of the container on the right */
+        }
+
+        .arrow.hidden {
+            display: none;
+        }
+
+        .arrow:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <button class="arrow left hidden" onclick="changePanel(-1)"></button>
+    <div class="container">
+        <div class="text" id="text-panel">
+            <h2>Kingdom of Alarion</h2>
+            <p>
+                In the kingdom of Alarion, nestled amidst the towering peaks and ancient forests, peace reigned for centuries under the rule of King Alaric. His only son, Prince Rodrick, was known throughout the land for his valor and kindness. By his side was his childhood friend, Valen, a skilled swordsman and strategist. The two had been inseparable since they could remember, facing every challenge together, whether it was hunting in the dense woods or sparring under the shadow of the castle walls.
+            </p>
+        </div>
+        <div class="image" id="image-panel">
+            <img src="overview.jpeg" alt="Cloudy Border Image">
+            <div class="cloudy-border"></div>
+        </div>
+    </div>
+    <button class="arrow right" onclick="changePanel(1)"></button>
+
+    <script>
+        const panels = [
+            {
+                title: "Kingdom of Alarion",
+                text: "In the kingdom of Alarion, nestled amidst the towering peaks and ancient forests, peace reigned for centuries under the rule of King Alaric. His only son, Prince Rodrick, was known throughout the land for his valor and kindness...",
+                image: "overview.jpeg"
+            },
+            {
+                title: "The Evil Sorcerer",
+                text: "But this tranquility was shattered one moonless night when a dark shadow descended upon the kingdom. The evil sorcerer, Adam, appeared under a cloak of thunderclouds, wielding a magic that hadn’t been seen for generations. His power was unlike any known in Alarion, and he struck fear into the hearts of all who crossed his path. With a mere flick of his hand, he conjured storms, made rivers run wild, and turned the sky as dark as night in broad daylight.",
+                image: "overview2.jpeg"
+            },
+            {
+                title: "Abducting",
+                text: "One night, Adam launched his most devastating act yet—he captured Princess Elizabeth, the King’s only daughter and Rodrick’s beloved sister. It happened during a festival, the princess’s laughter ringing through the air as lanterns lit up the night sky. Without warning, Adam swept down, engulfing her in a vortex of dark magic, vanishing into the shadows. The palace guards were powerless against his might, and he left behind only a whispered warning: “Seek me if you dare, but she will remain my prisoner forever.",
+                image: "overview3.jpeg"
+            },
+            {
+                title: "Rain of Sorrow",
+                text: "The kingdom mourned, and a shroud of sorrow settled over the once-vibrant palace. King Alaric, now frail with grief, pleaded with his son, Rodrick, to bring his sister back. Though Valen and Rodrick had faced danger before, they knew this was unlike any foe they had ever encountered. Rodrick, with fire in his heart and determination in his eyes, accepted the burden, vowing to bring Elizabeth home and end Adam’s terror once and for all.",
+                image: "overview4.jpeg"
+            },
+            {
+                title: "Preparation for Journey",
+                text: "In the days that followed, Rodrick and Valen prepared for their journey. They gathered supplies—enchanted swords, amulets, and maps detailing the treacherous path to Adam’s lair. Rumors spoke of the sorcerer’s fortress hidden in the Valley of Shadows, where magic twisted reality, and no sunlight reached. The people whispered of creatures that guarded the way—specters, enchanted beasts, and traps set by Adam himself to dissuade any would-be rescuers.",
+                image: "overview5.jpeg"
+            },
+            // Add the remaining panels as needed
+        ];
+
+        let currentPanel = 0;
+
+        function changePanel(direction) {
+            currentPanel += direction;
+            const textPanel = document.getElementById('text-panel');
+            const imagePanel = document.getElementById('image-panel').querySelector('img');
+            const leftArrow = document.querySelector('.arrow.left');
+            const rightArrow = document.querySelector('.arrow.right');
+
+            textPanel.querySelector('h2').innerText = panels[currentPanel].title;
+            textPanel.querySelector('p').innerText = panels[currentPanel].text;
+            imagePanel.src = panels[currentPanel].image;
+
+            // Toggle arrow visibility
+            leftArrow.classList.toggle('hidden', currentPanel === 0);
+            rightArrow.classList.toggle('hidden', currentPanel === panels.length - 1);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>River Crossing Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #87CEEB; /* Sky blue background */
+        }
+
+        #game-container {
+            text-align: center;
+        }
+
+        #game-area {
+            width: 600px;
+            height: 400px;
+            background-color: #1E90FF; /* Water blue */
+            position: relative;
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 10px;
+            display: none; /* Hide the game area initially */
+        }
+
+        .character {
+            width: 60px;
+            height: 80px;
+            position: absolute;
+            bottom: 10px;
+            background-size: cover; /* Ensures images are sized properly */
+            border-radius: 5px;
+        }
+
+        #boat {
+            background-image: url('boat.png'); /* Boat image */
+        }
+
+        .floating-object {
+            width: 60px;
+            height: 40px;
+            position: absolute;
+            background-size: cover;
+            border-radius: 5px;
+        }
+
+        #log {
+            background-image: url('coin.png'); /* Log image */
+        }
+
+        #rock {
+            background-image: url('rock.png'); /* Rock image */
+            width: 50px;
+            height: 50px;
+        }
+
+        #score {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        #how-to-play {
+            text-align: center;
+        }
+
+        #start-btn {
+            padding: 10px 20px;
+            background-color: #32CD32;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #start-btn:hover {
+            background-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <!-- How to Play Section -->
+        <div id="how-to-play">
+            <h1>River Crossing Game</h1>
+            <p>Use the arrow keys to move the boat and collect logs. Avoid rocks!</p>
+            <button id="start-btn">Start Game</button>
+        </div>
+
+        <!-- Game Area Section -->
+        <div id="game-area">
+            <div id="boat" class="character"></div>
+            <div id="log" class="floating-object"></div>
+            <div id="rock" class="floating-object"></div>
+        </div>
+
+        <p id="score">Score: 0</p>
+    </div>
+
+    <script>
+        let boat = document.getElementById('boat');
+        let log = document.getElementById('log');
+        let rock = document.getElementById('rock');
+        let scoreElement = document.getElementById('score');
+        let gameArea = document.getElementById('game-area');
+        let startButton = document.getElementById('start-btn');
+        let howToPlaySection = document.getElementById('how-to-play');
+
+        let boatX = 275;
+        let boatY = 370;
+        let score = 0;
+
+        const boatSpeed = 15;
+        const rockSpeed = 5;
+        const gameAreaWidth = 600;
+        const gameAreaHeight = 400;
+
+        function startGame() {
+            // Hide the "How to Play" section and show the game area
+            howToPlaySection.style.display = 'none';
+            gameArea.style.display = 'block';
+
+            // Initialize boat and floating objects
+            boat.style.left = boatX + 'px';
+            boat.style.bottom = boatY + 'px';
+
+            log.style.left = Math.random() * (gameAreaWidth - 60) + 'px';
+            log.style.top = Math.random() * (gameAreaHeight - 60) + 'px';
+
+            rock.style.left = Math.random() * (gameAreaWidth - 50) + 'px';
+            rock.style.top = -50 + 'px'; // Start rock above the screen
+
+            // Start listening to key presses
+            document.addEventListener('keydown', moveBoat);
+            setInterval(() => {
+                checkCollisions();
+                moveRock();
+            }, 100);
+        }
+
+        function updateScore() {
+            scoreElement.textContent = 'Score: ' + score;
+            if (score >= 200) {
+                window.location.href = 'scene3.2.php'; // Redirect when score reaches 200
+            }
+        }
+
+        function moveBoat(event) {
+            if (event.key === 'ArrowLeft' && boatX > 0) {
+                boatX -= boatSpeed;
+            } else if (event.key === 'ArrowRight' && boatX < gameAreaWidth - 60) {
+                boatX += boatSpeed;
+            } else if (event.key === 'ArrowUp' && boatY < gameAreaHeight - 40) {
+                boatY += boatSpeed;
+            } else if (event.key === 'ArrowDown' && boatY > 0) {
+                boatY -= boatSpeed;
+            }
+            boat.style.left = boatX + 'px';
+            boat.style.bottom = boatY + 'px';
+        }
+
+        function checkCollisions() {
+            let boatRect = boat.getBoundingClientRect();
+            let logRect = log.getBoundingClientRect();
+            let rockRect = rock.getBoundingClientRect();
+
+            // Check collision with log
+            if (boatRect.left < logRect.right && boatRect.right > logRect.left &&
+                boatRect.top < logRect.bottom && boatRect.bottom > logRect.top) {
+                score += 10;
+                log.style.left = Math.random() * (gameAreaWidth - 60) + 'px';
+                log.style.top = Math.random() * (gameAreaHeight - 60) + 'px';
+                updateScore();
+            }
+
+            // Check collision with rock
+            if (boatRect.left < rockRect.right && boatRect.right > rockRect.left &&
+                boatRect.top < rockRect.bottom && boatRect.bottom > rockRect.top) {
+                score -= 5;
+                rock.style.left = Math.random() * (gameAreaWidth - 50) + 'px';
+                rock.style.top = -50 + 'px'; // Reset rock to top of the screen
+                updateScore();
+            }
+        }
+
+        function moveRock() {
+            let rockTop = parseInt(rock.style.top);
+            if (rockTop < gameAreaHeight) {
+                rock.style.top = (rockTop + rockSpeed) + 'px';
+            } else {
+                // Reset rock if it goes off screen
+                rock.style.top = -50 + 'px';
+                rock.style.left = Math.random() * (gameAreaWidth - 50) + 'px';
+            }
+        }
+
+        // Start the game when the start button is clicked
+        startButton.addEventListener('click', startGame);
+    </script>
+
+</body>
+</html>

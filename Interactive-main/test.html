@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Movement</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling */
+            background-image: url('gras.png'); /* Replace with your image path */
+            background-size: 16px 16px; /* Set the size of each tile */
+            background-color: brown;
+            background-repeat: repeat; /* Repeat the image to cover the screen */
+            display: flex;
+            justify-content: center; /* Center the sand area horizontally */
+            align-items: flex-end; /* Align items to the bottom */
+        }
+
+        #sandArea {
+            width: 20%; /* Width of the sand area */
+            height: 100%; /* Height of the sand area */
+            background-image: url('sand.jpg'); /* Replace with your sand texture image */
+            background-size: 16px 16px; /* Set the size of each tile */
+            background-color: brown;
+            background-repeat: repeat;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Shadow around the sand area */
+        }
+
+        #player {
+            position: absolute;
+            width: 128px;
+            height: 128px;
+            background-size: cover;
+            bottom: 0; /* Start position at the bottom */
+            left: calc(50% - 128px); /* Center the player horizontally */
+        }
+
+        .flipped {
+            transform: scaleX(-1);
+        }
+    </style>
+</head>
+<body>
+    <div id="sandArea">
+        <div id="player"></div>
+    </div>
+    <script>
+        const player = document.getElementById('player');
+        player.style.backgroundImage = 'url(idledown.gif)';
+        let lastKey = null;
+        const activeKeys = {};
+        const moveDistance = 2;
+
+        function setPlayerGif(gif, flip = false) {
+            player.style.backgroundImage = `url(${gif})`;
+            player.classList.toggle('flipped', flip);
+        }
+
+        function movePlayer() {
+            const currentTop = parseInt(player.style.bottom) || 0; // Use bottom instead of top
+            const currentLeft = parseInt(player.style.left) || 0;
+
+            if (activeKeys['w']) {
+                setPlayerGif('walkup.gif');
+                player.style.bottom = `${currentTop + moveDistance}px`; // Move up
+                lastKey = 'w';
+            } else if (activeKeys['s']) {
+                setPlayerGif('walkdown.gif');
+                player.style.bottom = `${currentTop - moveDistance}px`; // Move down
+                lastKey = 's';
+            } else if (activeKeys['a']) {
+                setPlayerGif('walkside.gif');
+                player.style.left = `${currentLeft - moveDistance}px`; // Move left
+                lastKey = 'a';
+            } else if (activeKeys['d']) {
+                setPlayerGif('walkside.gif', true);
+                player.style.left = `${currentLeft + moveDistance}px`; // Move right
+                lastKey = 'd';
+            } else {
+                // Set to idle animation when no keys are active
+                switch (lastKey) {
+                    case 'w':
+                        setPlayerGif('idleup.gif');
+                        break;
+                    case 's':
+                        setPlayerGif('idledown.gif');
+                        break;
+                    case 'a':
+                        setPlayerGif('idleside.gif');
+                        break;
+                    case 'd':
+                        setPlayerGif('idleside.gif', true);
+                        break;
+                }
+            }
+
+            requestAnimationFrame(movePlayer);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            activeKeys[e.key] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            delete activeKeys[e.key];
+        });
+
+        requestAnimationFrame(movePlayer);
+    </script>
+</body>
+</html>

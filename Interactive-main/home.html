@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Adventure Game</title>
+    <style>
+        html, body {
+            height: 100%; /* Ensure full height */
+            margin: 0; /* Remove default margin */
+            display: flex; /* Use flexbox for centering */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+        body {
+            background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809'); 
+            background-size: cover;
+            font-family: 'Cinzel', serif;
+            color: #E6D9A2;
+            text-align: center;
+            padding-top: 200px; /* Add padding to move content below the navbar */
+            box-sizing: border-box; /* Include padding in height calculations */
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            max-width: 700px;
+            width: 95%; /* Responsive width */
+        }
+        h1 {
+            color: #CB80AB;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px #8967B3;
+        }
+        p {
+            margin: 15px 0;
+            line-height: 1.8;
+            font-size: 1.1em;
+            text-shadow: 1px 1px #000;
+        }
+        .button {
+            background: linear-gradient(45deg, #8967B3, #CB80AB);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.2em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+        }
+        .button:hover {
+            background: linear-gradient(45deg, #CB80AB, #8967B3);
+            transform: scale(1.05);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Your Interactive Adventure!</h1>
+        <p>
+            Welcome, noble adventurer, to a realm where your choices shape destiny! In this land of mystery and grandeur, your journey is filled with enchanting paths and epic quests. Every decision you make leads you deeper into a story woven with magic, intrigue, and wonder. Prepare to embark on a thrilling adventure where the fate of the kingdom is in your hands.
+        </p>
+        <p>
+            An interactive choice-based story game allows you to become the hero of a royal saga, where your actions direct the course of the tale. Unlike other adventures, this game places you at the heart of the narrative, where each choice can lead to glory or peril. Your decisions will forge alliances, conquer challenges, and unlock the secrets of this majestic world. It’s like living a legend, where you are both the author and the protagonist, shaping your own destiny.
+        </p>
+        <p>
+            Along this journey, you’ll not only make critical choices but also face formidable trials, cunning puzzles, and ancient foes. These challenges demand bravery, wit, and a noble heart, offering moments of triumph and reflection. As you unravel the mysteries before you, each encounter will test your spirit, pushing you to rise above and claim your legacy. The adventure awaits, and your story is about to begin!
+        </p>
+        <button class="button" onclick="startGame()">Start New Adventure</button>
+        <button class="button" onclick="ContinueGame()">Continue Your Adventure</button>
+    </div>
+
+    <script>
+        function startGame() {
+            window.parent.postMessage({ type: 'start', value: 1 }, '*');
+        }
+        function ContinueGame(){
+            window.parent.postMessage({ type: 'start', value: 2 }, '*');
+        }
+    </script>
+</body>
+</html>
